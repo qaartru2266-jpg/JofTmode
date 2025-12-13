@@ -1,0 +1,17 @@
+# ESP-IDF ignore rules
+/build/
+/managed_components/
+sdkconfig.old
+sdkconfig.ci
+*.map
+*.elf
+*.bin
+*.hex
+.vscode/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Sensitive data (如果有包含WiFi密码的文件，请在这里列出)
+# my_secrets.h

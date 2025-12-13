@@ -1,0 +1,12 @@
+idf_component_register(
+    SRCS
+        "./gps_interface/gps_interface.c"
+        "./axis6_interface/axis6_interface.c"
+    INCLUDE_DIRS
+        "."
+        "./gps_interface"
+        "./axis6_interface"
+    REQUIRES
+        driver
+        esp_timer
+)

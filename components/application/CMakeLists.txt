@@ -1,0 +1,31 @@
+idf_component_register(
+    SRCS
+        "app_axis6/app_axis6.c"
+        "app_gps/app_gps.c"
+        "app_sdcard/app_sdcard.c"
+        "app_gui/app_gui.c"
+        "app_gui/app_touch.cpp"
+        "app_vibration/app_vibration.c"
+        "app_power/app_power.c"
+        "interface/axis6_interface/axis6_interface.c"
+        "interface/gps_interface/gps_interface.c"
+        "../../main/ice.c"
+    INCLUDE_DIRS
+        "app_axis6/include"
+        "app_gps/include"
+        "app_sdcard/include"
+        "app_gui/include"
+        "app_vibration/include"
+        "app_power/include"
+        "interface/axis6_interface/include"
+        "interface/gps_interface/include"
+    REQUIRES
+        driver
+        sdmmc
+        fatfs
+        lvgl
+        display_hal
+        ml            
+        SensorLib           
+        esp_timer 
+)

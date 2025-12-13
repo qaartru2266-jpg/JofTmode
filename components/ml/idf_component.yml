@@ -1,0 +1,4 @@
+version: "0.1.0"
+description: "TinyML runner for int8 TFLM model"
+dependencies:
+  espressif/esp-tflite-micro: "^1.3.4"
