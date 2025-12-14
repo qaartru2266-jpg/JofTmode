@@ -7,6 +7,7 @@
 
 #include "driver/i2c.h"
 
+#include "sdkconfig.h"
 #include "axis6_interface.h"
 
 
@@ -18,11 +19,11 @@ esp_err_t i2c_master_init(void)
 
     i2c_config_t conf = {
         .mode = I2C_MODE_MASTER,
-        .sda_io_num = GPIO_NUM_2,
-        .scl_io_num = GPIO_NUM_1,
+        .sda_io_num = CONFIG_JOFTMODE_I2C_SDA,
+        .scl_io_num = CONFIG_JOFTMODE_I2C_SCL,
         .sda_pullup_en = GPIO_PULLUP_ENABLE,
         .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = 100000,
+        .master.clk_speed = CONFIG_JOFTMODE_I2C_FREQ_HZ,
     };
 
     i2c_param_config(i2c_master_port, &conf);

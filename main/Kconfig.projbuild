@@ -1,49 +1,31 @@
-menu "Example Configuration"
+menu "JofTmode Configuration"
 
-    orsource "$IDF_PATH/examples/common_components/env_caps/$IDF_TARGET/Kconfig.env_caps"
+config JOFTMODE_I2C_SCL
+    int "QMI8658 I2C SCL GPIO"
+    range 0 48
+    default 1
+    help
+        GPIO number used as SCL for the IMU I2C bus.
 
-    choice BLINK_LED
-        prompt "Blink LED type"
-        default BLINK_LED_GPIO
-        help
-            Select the LED type. A normal level controlled LED or an addressable LED strip.
-            The default selection is based on the Espressif DevKit boards.
-            You can change the default selection according to your board.
+config JOFTMODE_I2C_SDA
+    int "QMI8658 I2C SDA GPIO"
+    range 0 48
+    default 2
+    help
+        GPIO number used as SDA for the IMU I2C bus.
 
-        config BLINK_LED_GPIO
-            bool "GPIO"
-        config BLINK_LED_STRIP
-            bool "LED strip"
-    endchoice
+config JOFTMODE_I2C_FREQ_HZ
+    int "QMI8658 I2C clock frequency (Hz)"
+    range 10000 1000000
+    default 100000
+    help
+        I2C master clock frequency for the IMU sensor.
 
-    choice BLINK_LED_STRIP_BACKEND
-        depends on BLINK_LED_STRIP
-        prompt "LED strip backend peripheral"
-        default BLINK_LED_STRIP_BACKEND_RMT if SOC_RMT_SUPPORTED
-        default BLINK_LED_STRIP_BACKEND_SPI
-        help
-            Select the backend peripheral to drive the LED strip.
-
-        config BLINK_LED_STRIP_BACKEND_RMT
-            depends on SOC_RMT_SUPPORTED
-            bool "RMT"
-        config BLINK_LED_STRIP_BACKEND_SPI
-            bool "SPI"
-    endchoice
-
-    config BLINK_GPIO
-        int "Blink GPIO number"
-        range ENV_GPIO_RANGE_MIN ENV_GPIO_OUT_RANGE_MAX
-        default 8
-        help
-            GPIO number (IOxx) to blink on and off the LED.
-            Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to blink.
-
-    config BLINK_PERIOD
-        int "Blink period in ms"
-        range 10 3600000
-        default 1000
-        help
-            Define the blinking period in milliseconds.
+config JOFTMODE_POWER_KEY_GPIO
+    int "Power button GPIO"
+    range 0 48
+    default 46
+    help
+        GPIO number connected to the long-press power key.
 
 endmenu

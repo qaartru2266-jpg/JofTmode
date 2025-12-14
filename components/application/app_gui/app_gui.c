@@ -63,34 +63,6 @@ static void flush_cb(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map)
     lv_display_flush_ready(disp);
 }
 
-#if 0
-#define GUI_UPDATE_MS  200   // 每 200ms 刷一次文案
-
-/* 若工程里没实现 app_ml_get_latest，这个弱符号会生效，返回 false。一旦在 app_sdcard.c 里提供了真正的实现，这里会被自动覆盖。 */
-__attribute__((weak)) bool app_ml_get_latest(ml_result_t *out) {
-    (void)out; return false;
-}
-
-/* 若 lv_conf.h 启用了 20 号字，这里声明它（文件作用域，避免函数内告警） */
-#if LV_FONT_MONTSERRAT_20
-LV_FONT_DECLARE(lv_font_montserrat_20);
-#endif
-
-/* ---------- 只“取值并拼文本”，不操作 UI ---------- */
-static void build_text_from_ml(char *out, size_t out_sz)
-{
-    ml_result_t r;
-    bool ok = app_ml_get_latest(&r);     // 优先快照（非消耗型）
-    if (!ok) ok = ml_get_latest_result(&r); // 回退
-
-    if (ok) {
-        const char *mode = (r.pred == 0) ? "walk" : "ebike";
-        snprintf(out, out_sz, "%s", mode);   // ← 只显示 walk/ebike
-    } else {
-        snprintf(out, out_sz, "Waiting for model");
-    }
-}
-#endif
 
 /* ---------- 触控回调函数 ---------- */
 static void touch_read_cb(lv_indev_t * indev, lv_indev_data_t * data)
@@ -205,34 +177,6 @@ static void gui_task(void *arg)
     s_main_screen = lv_screen_active();
     lv_obj_set_style_bg_color(s_main_screen, lv_color_black(), 0);
 
-#if 0
-    lv_obj_t *label = lv_label_create(lv_screen_active());
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
-
-    // 让 Label 宽度 = 整屏宽，“居中”有参照
-    lv_obj_set_width(label, s_hal.hor_res);
-    lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);  // 多行时正常换行（此处单行）
-
-    // 字体：启用了 20 号字就用20；否则退回默认字体（默认是正体）
-    #if LV_FONT_MONTSERRAT_20
-        lv_obj_set_style_text_font(label, &lv_font_montserrat_20, 0);
-    #else
-        lv_obj_set_style_text_font(label, LV_FONT_DEFAULT, 0);
-    #endif
-
-    // 明确禁用任何几何变换（防止倾斜/旋转）
-    lv_obj_set_style_transform_angle(label, 0, 0);
-    lv_obj_set_style_transform_skew_x(label, 0, 0);
-    lv_obj_set_style_transform_skew_y(label, 0, 0);
-    lv_obj_set_style_text_decor(label, LV_TEXT_DECOR_NONE, 0);
-
-    // 放中间
-    lv_obj_center(label);
-
-    // 首帧文案
-    lv_label_set_text(label, "Waiting for model");
-#endif
 
     // 用整屏图片替换文字显示
     lv_obj_t *img = lv_image_create(s_main_screen);
@@ -277,32 +221,12 @@ static void gui_task(void *arg)
     lv_obj_invalidate(s_main_screen);
     lv_refr_now(disp);
 
-#if 0
-    // 8) 主循环：每 GUI_UPDATE_MS 构文案；仅变化时才 set_text
-    uint32_t last_update_ms = 0;
-    char     last_txt[32] = {0};
-#endif
 
     ESP_LOGW(TAG, "LVGL fmt=RGB888; ensure panel is 3B/px (18/24bpp) to avoid slant.");
 
     while (1) {
         lv_timer_handler();
 
-#if 0
-        uint32_t now = lv_tick_cb();
-        if (now - last_update_ms >= GUI_UPDATE_MS) {
-            last_update_ms = now;
-
-            char txt[32];
-            build_text_from_ml(txt, sizeof(txt));
-
-            if (strcmp(last_txt, txt) != 0) {
-                lv_label_set_text(label, txt);       // ← 唯一修改 UI 文本的地方
-                strncpy(last_txt, txt, sizeof(last_txt) - 1);
-                last_txt[sizeof(last_txt) - 1] = '\0';
-            }
-        }
-#endif
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }

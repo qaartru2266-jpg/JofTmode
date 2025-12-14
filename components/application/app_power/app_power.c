@@ -6,10 +6,11 @@
 
 #include "app_vibration.h"
 #include "app_gui.h"
+#include "sdkconfig.h"
 
-#define KEY_GPIO            GPIO_NUM_46   // 
-#define SCAN_INTERVAL_MS    20            // 
-#define LONG_PRESS_MS       2000          // 
+#define KEY_GPIO            ((gpio_num_t)CONFIG_JOFTMODE_POWER_KEY_GPIO)
+#define SCAN_INTERVAL_MS    20
+#define LONG_PRESS_MS       2000
 
 static TaskHandle_t s_power_task = NULL;
 static bool s_power_on = true;  // ��ʼΪ����״̬
