@@ -12,11 +12,10 @@
 
 
 static const char * TAG = "axis6";
+static const int AXIS6_I2C_PORT = 1;
 
 esp_err_t i2c_master_init(void)
 {
-    int i2c_master_port = 0;
-
     i2c_config_t conf = {
         .mode = I2C_MODE_MASTER,
         .sda_io_num = CONFIG_JOFTMODE_I2C_SDA,
@@ -26,9 +25,9 @@ esp_err_t i2c_master_init(void)
         .master.clk_speed = CONFIG_JOFTMODE_I2C_FREQ_HZ,
     };
 
-    i2c_param_config(i2c_master_port, &conf);
+    i2c_param_config(AXIS6_I2C_PORT, &conf);
 
-    return i2c_driver_install(i2c_master_port, conf.mode, 0, 0, 0);
+    return i2c_driver_install(AXIS6_I2C_PORT, conf.mode, 0, 0, 0);
 }
 
 
@@ -37,7 +36,7 @@ esp_err_t i2c_master_init(void)
 // 读取QMI8658寄存器的值
 esp_err_t qmi8658_register_read(uint8_t reg_addr, uint8_t *data, size_t len)
 {
-    return i2c_master_write_read_device(0, QMI8658_SENSOR_ADDR,  &reg_addr, 1, data, len, 1000 / portTICK_PERIOD_MS);
+    return i2c_master_write_read_device(AXIS6_I2C_PORT, QMI8658_SENSOR_ADDR,  &reg_addr, 1, data, len, 1000 / portTICK_PERIOD_MS);
 }
 
 // 给QMI8658的寄存器写值
@@ -45,7 +44,7 @@ esp_err_t qmi8658_register_write_byte(uint8_t reg_addr, uint8_t data)
 {
     uint8_t write_buf[2] = {reg_addr, data};
 
-    return i2c_master_write_to_device(0, QMI8658_SENSOR_ADDR, write_buf, sizeof(write_buf), 1000 / portTICK_PERIOD_MS);
+    return i2c_master_write_to_device(AXIS6_I2C_PORT, QMI8658_SENSOR_ADDR, write_buf, sizeof(write_buf), 1000 / portTICK_PERIOD_MS);
 }
 
 // 初始化qmi8658

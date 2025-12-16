@@ -5,7 +5,7 @@ idf_component_register(
         "app_gps/app_gps_parser.c"
         "app_sdcard/app_sdcard.c"
         "app_gui/app_gui.c"
-        "app_gui/app_touch.cpp"
+        "app_gui/amoled_port.c"
         "app_gui/assets/wallpaper_image.c"
         "app_vibration/app_vibration.c"
         "app_power/app_power.c"
@@ -27,7 +27,10 @@ idf_component_register(
         sdmmc
         fatfs
         lvgl
-        display_hal
+        esp_lcd
+        esp_lcd_touch
+        esp_lcd_qspi_amoled
+        esp_lcd_touch_chsc6417
         ml
         SensorLib
         esp_timer

@@ -19,7 +19,7 @@
 #include "ml_window.h"
 
 #define MOUNT_POINT         "/sdcard"
-#define SDCARD_SPI_HOST     SPI2_HOST
+#define SDCARD_SPI_HOST     SPI3_HOST
 #define SDCARD_PIN_MOSI     GPIO_NUM_17
 #define SDCARD_PIN_MISO     GPIO_NUM_15
 #define SDCARD_PIN_SCLK     GPIO_NUM_16
